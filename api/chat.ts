@@ -1,4 +1,4 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { VercelRequest, VercelResponse } from '@vercel/node';
 
 // AI Context - Inline to avoid build issues with serverless
 const AI_SYSTEM_PROMPT = `You are a helpful AI assistant representing Maximilian Funk, an Android & React Developer based in Copenhagen, Denmark.
@@ -52,7 +52,7 @@ interface ChatMessage {
   content: string;
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+module.exports = async function handler(req: VercelRequest, res: VercelResponse) {
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
