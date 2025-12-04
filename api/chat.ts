@@ -52,55 +52,110 @@ interface ChatMessage {
   content: string;
 }
 
+// Call OpenAI API
+async function callOpenAI(messages: ChatMessage[], model: string, apiKey: string): Promise<string> {
+  const openAIMessages = [
+    { role: 'system', content: AI_SYSTEM_PROMPT },
+    ...messages.slice(-10),
+  ];
+
+  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: model,
+      messages: openAIMessages,
+      max_tokens: 500,
+      temperature: 0.7,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    console.error('OpenAI API error:', error);
+    throw new Error('Failed to get OpenAI response');
+  }
+
+  const data = await response.json();
+  return data.choices[0]?.message?.content || '';
+}
+
+// Call Gemini API
+async function callGemini(messages: ChatMessage[], apiKey: string): Promise<string> {
+  // Convert messages to Gemini format
+  const geminiMessages = messages.slice(-10).map(m => ({
+    role: m.role === 'assistant' ? 'model' : 'user',
+    parts: [{ text: m.content }]
+  }));
+
+  // Add system prompt as first user message
+  geminiMessages.unshift({
+    role: 'user',
+    parts: [{ text: `[System Instructions]\n${AI_SYSTEM_PROMPT}\n\n[End of System Instructions]\n\nPlease acknowledge you understand and are ready to help.` }]
+  });
+  geminiMessages.splice(1, 0, {
+    role: 'model',
+    parts: [{ text: "I understand! I'm Max's AI assistant, ready to help answer questions about his professional background, skills, and projects. How can I help you today?" }]
+  });
+
+  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      contents: geminiMessages,
+      generationConfig: {
+        maxOutputTokens: 500,
+        temperature: 0.7,
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    console.error('Gemini API error:', error);
+    throw new Error('Failed to get Gemini response');
+  }
+
+  const data = await response.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Check for API key
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    return res.status(500).json({ error: 'OpenAI API key not configured' });
-  }
-
   try {
     const { messages, model } = req.body as { messages: ChatMessage[], model?: string };
-    const selectedModel = model === 'gpt-3.5-turbo' ? 'gpt-3.5-turbo' : 'gpt-4o-mini';
 
     if (!messages || !Array.isArray(messages)) {
       return res.status(400).json({ error: 'Messages array is required' });
     }
 
-    // Prepare messages with system prompt
-    const openAIMessages = [
-      { role: 'system', content: AI_SYSTEM_PROMPT },
-      ...messages.slice(-10), // Limit to last 10 messages to stay within token limits
-    ];
+    let assistantMessage: string;
 
-    // Call OpenAI API
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: selectedModel,
-        messages: openAIMessages,
-        max_tokens: 500,
-        temperature: 0.7,
-      }),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      console.error('OpenAI API error:', error);
-      return res.status(500).json({ error: 'Failed to get AI response' });
+    if (model === 'gemini-1.5-flash') {
+      // Use Gemini
+      const geminiKey = process.env.GEMINI_API_KEY;
+      if (!geminiKey) {
+        return res.status(500).json({ error: 'Gemini API key not configured' });
+      }
+      assistantMessage = await callGemini(messages, geminiKey);
+    } else {
+      // Use OpenAI (default)
+      const openaiKey = process.env.OPENAI_API_KEY;
+      if (!openaiKey) {
+        return res.status(500).json({ error: 'OpenAI API key not configured' });
+      }
+      const selectedModel = model === 'gpt-3.5-turbo' ? 'gpt-3.5-turbo' : 'gpt-4o-mini';
+      assistantMessage = await callOpenAI(messages, selectedModel, openaiKey);
     }
-
-    const data = await response.json();
-    const assistantMessage = data.choices[0]?.message?.content;
 
     if (!assistantMessage) {
       return res.status(500).json({ error: 'No response from AI' });
@@ -112,4 +167,3 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: 'Internal server error' });
   }
 }
-

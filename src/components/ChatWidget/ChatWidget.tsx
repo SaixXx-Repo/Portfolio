@@ -29,7 +29,7 @@ export const ChatWidget: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [lastMessageTime, setLastMessageTime] = useState<number>(0);
-  const [selectedModel, setSelectedModel] = useState<'gpt-4o-mini' | 'gpt-3.5-turbo'>('gpt-4o-mini');
+  const [selectedModel, setSelectedModel] = useState<'gpt-4o-mini' | 'gpt-3.5-turbo' | 'gemini-1.5-flash'>('gpt-4o-mini');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -194,22 +194,16 @@ export const ChatWidget: React.FC = () => {
                   </span>
                 </div>
               </div>
-              <div className="chat-widget__model-toggle">
-                <button
-                  className={`chat-widget__model-btn ${selectedModel === 'gpt-4o-mini' ? 'chat-widget__model-btn--active' : ''}`}
-                  onClick={() => setSelectedModel('gpt-4o-mini')}
-                  title="GPT-4o Mini - Faster & Cheaper"
-                >
-                  4o
-                </button>
-                <button
-                  className={`chat-widget__model-btn ${selectedModel === 'gpt-3.5-turbo' ? 'chat-widget__model-btn--active' : ''}`}
-                  onClick={() => setSelectedModel('gpt-3.5-turbo')}
-                  title="GPT-3.5 Turbo - Classic"
-                >
-                  3.5
-                </button>
-              </div>
+              <select
+                className="chat-widget__model-select"
+                value={selectedModel}
+                onChange={(e) => setSelectedModel(e.target.value as 'gpt-4o-mini' | 'gpt-3.5-turbo' | 'gemini-1.5-flash')}
+                title="Select AI Model"
+              >
+                <option value="gpt-4o-mini">GPT-4o Mini</option>
+                <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+              </select>
               <button
                 className="chat-widget__close"
                 onClick={() => setIsOpen(false)}
