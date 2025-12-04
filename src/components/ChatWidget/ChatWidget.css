@@ -142,26 +142,41 @@
 
 /* Model Select Dropdown */
 .chat-widget__model-select {
-  padding: 4px 8px;
-  font-size: 11px;
+  padding: 6px 24px 6px 10px;
+  font-size: 12px;
   font-weight: var(--font-weight-medium);
-  border: none;
-  border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.2);
+  font-family: var(--font-sans);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.15);
   color: white;
   cursor: pointer;
   outline: none;
   margin-right: var(--spacing-sm);
-  transition: background-color var(--transition-fast);
+  transition: all var(--transition-fast);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+  background-size: 12px;
 }
 
 .chat-widget__model-select:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.chat-widget__model-select:focus {
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
 }
 
 .chat-widget__model-select option {
   background: var(--color-bg-secondary);
   color: var(--color-text-primary);
+  padding: 8px;
 }
 
 .chat-widget__close {

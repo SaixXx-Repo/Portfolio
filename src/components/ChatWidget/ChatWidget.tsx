@@ -29,7 +29,7 @@ export const ChatWidget: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [lastMessageTime, setLastMessageTime] = useState<number>(0);
-  const [selectedModel, setSelectedModel] = useState<'gpt-4o-mini' | 'gpt-3.5-turbo' | 'gemini-1.5-flash'>('gpt-4o-mini');
+  const [selectedModel, setSelectedModel] = useState<'gpt-4o-mini' | 'gpt-3.5-turbo' | 'gemini-2.0-flash'>('gpt-4o-mini');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -197,12 +197,12 @@ export const ChatWidget: React.FC = () => {
               <select
                 className="chat-widget__model-select"
                 value={selectedModel}
-                onChange={(e) => setSelectedModel(e.target.value as 'gpt-4o-mini' | 'gpt-3.5-turbo' | 'gemini-1.5-flash')}
+                onChange={(e) => setSelectedModel(e.target.value as 'gpt-4o-mini' | 'gpt-3.5-turbo' | 'gemini-2.0-flash')}
                 title="Select AI Model"
               >
                 <option value="gpt-4o-mini">GPT-4o Mini</option>
-                <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                <option value="gpt-3.5-turbo">GPT-3.5</option>
+                <option value="gemini-2.0-flash">Gemini 2.0</option>
               </select>
               <button
                 className="chat-widget__close"

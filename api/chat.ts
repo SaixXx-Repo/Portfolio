@@ -140,7 +140,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     let assistantMessage: string;
 
-    if (model === 'gemini-1.5-flash') {
+    if (model === 'gemini-2.0-flash') {
       // Use Gemini
       const geminiKey = process.env.GEMINI_API_KEY;
       if (!geminiKey) {
