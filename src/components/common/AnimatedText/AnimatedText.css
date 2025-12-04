@@ -1,0 +1,46 @@
+.animated-text {
+  display: inline-block;
+}
+
+.animated-text--reveal {
+  overflow: hidden;
+}
+
+.animated-text__word {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.animated-text__char {
+  display: inline-block;
+}
+
+.animated-text--typewriter {
+  font-family: var(--font-mono);
+}
+
+.animated-text__cursor {
+  display: inline-block;
+  animation: blink 0.8s infinite;
+  color: var(--color-accent-primary);
+  font-weight: var(--font-weight-normal);
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+.animated-text--scramble {
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+}
+
+.animated-text--gradient {
+  display: inline-block;
+}
+

@@ -1,38 +1,75 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+.app {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  transition: 
+    background-color var(--transition-normal),
+    color var(--transition-normal);
+}
+
+.main {
+  position: relative;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}
+
+/* Skip link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-accent-primary);
   color: white;
+  padding: var(--spacing-sm) var(--spacing-md);
+  z-index: 9999;
+  transition: top 0.3s;
 }
 
-.App-link {
-  color: #61dafb;
+.skip-link:focus {
+  top: 0;
 }
 
-@keyframes App-logo-spin {
+/* Loading animation */
+@keyframes fadeIn {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
   }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+  }
+}
+
+.app {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Section alternating backgrounds */
+.section:nth-child(even) {
+  background-color: var(--color-bg-secondary);
+}
+
+/* Print styles */
+@media print {
+  .navbar,
+  .theme-toggle {
+    display: none !important;
+  }
+
+  .hero {
+    min-height: auto;
+    padding: 2rem 0;
+  }
+
+  .section {
+    break-inside: avoid;
   }
 }
