@@ -134,6 +134,38 @@
   }
 }
 
+/* Model Toggle */
+.chat-widget__model-toggle {
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  margin-right: var(--spacing-sm);
+}
+
+.chat-widget__model-btn {
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.chat-widget__model-btn:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.chat-widget__model-btn--active {
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+}
+
 .chat-widget__close {
   width: 32px;
   height: 32px;

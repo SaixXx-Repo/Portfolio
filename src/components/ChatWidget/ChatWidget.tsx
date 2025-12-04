@@ -29,6 +29,7 @@ export const ChatWidget: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [lastMessageTime, setLastMessageTime] = useState<number>(0);
+  const [selectedModel, setSelectedModel] = useState<'gpt-4o-mini' | 'gpt-3.5-turbo'>('gpt-4o-mini');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -81,6 +82,7 @@ export const ChatWidget: React.FC = () => {
             role: m.role,
             content: m.content,
           })),
+          model: selectedModel,
         }),
       });
 
@@ -161,7 +163,7 @@ export const ChatWidget: React.FC = () => {
             </motion.svg>
           )}
         </AnimatePresence>
-        
+
         {/* Pulse animation when closed */}
         {!isOpen && (
           <span className="chat-widget__pulse" />
@@ -192,6 +194,22 @@ export const ChatWidget: React.FC = () => {
                   </span>
                 </div>
               </div>
+              <div className="chat-widget__model-toggle">
+                <button
+                  className={`chat-widget__model-btn ${selectedModel === 'gpt-4o-mini' ? 'chat-widget__model-btn--active' : ''}`}
+                  onClick={() => setSelectedModel('gpt-4o-mini')}
+                  title="GPT-4o Mini - Faster & Cheaper"
+                >
+                  4o
+                </button>
+                <button
+                  className={`chat-widget__model-btn ${selectedModel === 'gpt-3.5-turbo' ? 'chat-widget__model-btn--active' : ''}`}
+                  onClick={() => setSelectedModel('gpt-3.5-turbo')}
+                  title="GPT-3.5 Turbo - Classic"
+                >
+                  3.5
+                </button>
+              </div>
               <button
                 className="chat-widget__close"
                 onClick={() => setIsOpen(false)}
@@ -221,7 +239,7 @@ export const ChatWidget: React.FC = () => {
                   </div>
                 </motion.div>
               ))}
-              
+
               {/* Loading indicator */}
               {isLoading && (
                 <motion.div
@@ -237,7 +255,7 @@ export const ChatWidget: React.FC = () => {
                   </div>
                 </motion.div>
               )}
-              
+
               <div ref={messagesEndRef} />
             </div>
 

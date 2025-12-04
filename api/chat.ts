@@ -65,7 +65,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { messages } = req.body as { messages: ChatMessage[] };
+    const { messages, model } = req.body as { messages: ChatMessage[], model?: string };
+    const selectedModel = model === 'gpt-3.5-turbo' ? 'gpt-3.5-turbo' : 'gpt-4o-mini';
 
     if (!messages || !Array.isArray(messages)) {
       return res.status(400).json({ error: 'Messages array is required' });
@@ -85,7 +86,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini', // Cost-effective model, can upgrade to gpt-4 if needed
+        model: selectedModel,
         messages: openAIMessages,
         max_tokens: 500,
         temperature: 0.7,
