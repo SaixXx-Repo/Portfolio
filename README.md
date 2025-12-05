@@ -3,7 +3,6 @@
 A modern, interactive personal portfolio website built with React and TypeScript. This project showcases my skills, professional experience, and projects in Android and Web Development.
 
 ![Portfolio Preview](public/images/preview.png)
-*(Add a screenshot of your landing page here and name it `preview.png` in `public/images/`)*
 
 ## 🚀 Features
 
@@ -72,15 +71,12 @@ A modern, interactive personal portfolio website built with React and TypeScript
 
 ### Landing Page
 ![Landing Page](public/images/landing-page.png)
-*(Place your screenshot in `public/images/landing-page.png`)*
 
 ### Projects Section
 ![Projects](public/images/projects.png)
-*(Place your screenshot in `public/images/projects.png`)*
 
 ### Chat Widget
 ![Chat Widget](public/images/chat-widget.png)
-*(Place your screenshot in `public/images/chat-widget.png`)*
 
 ## 📄 License
 
