@@ -62,17 +62,21 @@ export const projects: Project[] = [
 export const skills: Skill[] = [
   // Frontend
   { name: 'React', category: 'frontend', icon: 'ReactIcon' },
-  { name: 'TypeScript', category: 'frontend', icon: 'TypeScriptIcon' },
-  { name: 'JavaScript', category: 'frontend', icon: 'JavaScriptIcon' },
-  { name: 'HTML/CSS', category: 'frontend', icon: 'HtmlIcon' },
-  { name: 'Redux', category: 'frontend' },
+  { name: 'Vercel', category: 'frontend', icon: 'VercelIcon' },
+  { name: 'Tailwind CSS', category: 'frontend', icon: 'TailwindIcon' },
+  { name: 'GSAP', category: 'frontend', icon: 'GSAPIcon' },
+  { name: 'Jest', category: 'frontend', icon: 'JestIcon' },
   { name: 'Next.js', category: 'frontend', icon: 'NextJSIcon' },
+  { name: 'Gemini AI', category: 'frontend', icon: 'GeminiIcon' },
 
   // Mobile
   { name: 'Android SDK', category: 'mobile', icon: 'AndroidIcon' },
-  { name: 'Jetpack Compose', category: 'mobile', icon: 'AndroidIcon' },
+  { name: 'Jetpack Compose', category: 'mobile', icon: 'JetpackComposeIcon' },
   { name: 'Room Database', category: 'mobile', icon: 'DatabaseIcon' },
-  { name: 'Hilt/Dagger', category: 'mobile' },
+  { name: 'Hilt/Dagger', category: 'mobile', icon: 'HiltIcon' },
+  { name: 'Coroutines', category: 'mobile', icon: 'CoroutinesIcon' },
+  { name: 'Flow', category: 'mobile', icon: 'FlowIcon' },
+  { name: 'Gradle', category: 'mobile', icon: 'GradleIcon' },
   { name: 'Firebase', category: 'mobile', icon: 'FirebaseIcon' },
 
   // Languages
@@ -80,20 +84,23 @@ export const skills: Skill[] = [
   { name: 'Kotlin', category: 'languages', icon: 'KotlinIcon' },
   { name: 'JavaScript', category: 'languages', icon: 'JavaScriptIcon' },
   { name: 'TypeScript', category: 'languages', icon: 'TypeScriptIcon' },
-  { name: 'C', category: 'languages' },
-  { name: 'C++', category: 'languages' },
+  { name: 'C', category: 'languages', icon: 'CIcon' },
+  { name: 'C++', category: 'languages', icon: 'CppIcon' },
   { name: 'Python', category: 'languages', icon: 'PythonIcon' },
-  { name: 'PHP', category: 'languages' },
+  { name: 'PHP', category: 'languages', icon: 'PHPIcon' },
   { name: 'HTML/CSS', category: 'languages', icon: 'HtmlIcon' },
   { name: 'SQL', category: 'languages', icon: 'DatabaseIcon' },
 
   // Tools
   { name: 'Git', category: 'tools', icon: 'GitIcon' },
+  { name: 'GitHub', category: 'tools', icon: 'GitHubIcon' },
   { name: 'Android Studio', category: 'tools', icon: 'AndroidIcon' },
   { name: 'VS Code', category: 'tools', icon: 'VSCodeIcon' },
   { name: 'Cursor', category: 'tools' },
-  { name: 'Figma', category: 'tools' },
-  { name: 'CI/CD', category: 'tools' },
+  { name: 'Antigravity', category: 'tools', icon: 'AntigravityIcon' },
+  { name: 'MySQL', category: 'tools', icon: 'DatabaseIcon' },
+  { name: 'Figma', category: 'tools', icon: 'FigmaIcon' },
+  { name: 'ADB', category: 'tools', icon: 'AndroidIcon' },
 ];
 
 export const certificates: Certificate[] = [
@@ -172,8 +179,7 @@ export const personalInfo = {
   bio: `I'm a passionate software developer specializing in Android app development and React frontend development. 
   With a keen eye for design and a love for clean code, I create applications that are both beautiful and performant.
   
-  When I'm not coding, you can find me exploring new technologies, contributing to open-source projects, 
-  or sharing knowledge with the developer community.`,
+  When I'm not coding, you can find me working out or spending time with my family and friends.`,
   location: 'Copenhagen, Denmark',
   email: 'maxchfunk@gmail.com',
   resumeUrl: '#',

@@ -1,70 +1,87 @@
-# Portfolio
+# Maximilian Funk - Portfolio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, interactive personal portfolio website built with React and TypeScript. This project showcases my skills, professional experience, and projects in Android and Web Development.
 
-## Available Scripts
+![Portfolio Preview](public/images/preview.png)
+*(Add a screenshot of your landing page here and name it `preview.png` in `public/images/`)*
 
-In the project directory, you can run:
+## 🚀 Features
 
-### `npm start`
+-   **Interactive AI Assistant**: A custom chat widget powered by Google's Gemini AI that answers questions about my background and experience.
+-   **Dynamic Project Showcase**: Filterable project grid with detailed cards, technology tags, and video previews.
+-   **Skills Visualization**: Animated "Tech Orbit" and categorized skill lists.
+-   **Responsive Design**: Fully optimized for mobile, tablet, and desktop devices.
+-   **Modern Animations**: Smooth transitions and interactions using Framer Motion and GSAP.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🛠️ Tech Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Core
+-   **React 18**: UI Library
+-   **TypeScript**: Type safety and developer experience
+-   **Vite**: Fast build tool and development server
 
-### `npm test`
+### Styling & Animation
+-   **CSS Modules / Variables**: Custom design system with dark mode support
+-   **Framer Motion**: Complex layout animations and gestures
+-   **GSAP**: High-performance animations (used for the Tech Orbit)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Backend / API
+-   **Vercel Serverless Functions**: Handles API requests for the chat assistant
+-   **Google Gemini AI**: Provides the intelligence for the chat assistant
 
-### `npm run build`
+## 📦 Libraries Used
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+-   `react` / `react-dom`: Core framework
+-   `framer-motion`: Animation library
+-   `gsap`: Animation library
+-   `react-icons` (or custom SVG icons): Iconography
+-   `@vercel/node`: Serverless function support
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🏃‍♂️ Getting Started
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1.  **Clone the repository**
+    ```bash
+    git clone https://github.com/SaixXx-Repo/Portfolio.git
+    cd Portfolio
+    ```
 
-### `npm run eject`
+2.  **Install dependencies**
+    ```bash
+    npm install
+    ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3.  **Set up Environment Variables**
+    Create a `.env` file in the root directory and add your API keys:
+    ```env
+    GEMINI_API_KEY=your_gemini_api_key_here
+    ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4.  **Run the development server**
+    ```bash
+    npm start
+    # or
+    vercel dev
+    ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+5.  **Build for production**
+    ```bash
+    npm run build
+    ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 📸 Screenshots
 
-## Learn More
+### Landing Page
+![Landing Page](public/images/landing-page.png)
+*(Place your screenshot in `public/images/landing-page.png`)*
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Projects Section
+![Projects](public/images/projects.png)
+*(Place your screenshot in `public/images/projects.png`)*
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Chat Widget
+![Chat Widget](public/images/chat-widget.png)
+*(Place your screenshot in `public/images/chat-widget.png`)*
 
-### Code Splitting
+## 📄 License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is open source and available under the [MIT License](LICENSE).

@@ -16,10 +16,10 @@ When I'm not coding, you can find me exploring new technologies, contributing to
 - GitHub: https://github.com/SaixXx-Repo
 
 ## Technical Skills
-Frontend: React (80%), TypeScript (80%), Next.js (70%), HTML/CSS (70%), Redux (50%), JavaScript (40%)
-Mobile: Android SDK (90%), Jetpack Compose (80%), Room Database (80%), Hilt/Dagger (80%), Firebase (60%)
-Languages: Kotlin (90%), TypeScript (60%), HTML/CSS (70%), C (40%), C++ (40%), JavaScript (40%), SQL (40%), PHP (30%), Java (30%), Python (20%)
-Tools: Git (90%), Android Studio (90%), Cursor (85%), VS Code (80%), CI/CD (75%), Figma (65%)
+Frontend: React, TypeScript, Next.js, HTML/CSS, Redux, JavaScript
+Mobile: Android SDK, Jetpack Compose, Room Database, Hilt/Dagger, Firebase
+Languages: Kotlin, TypeScript, HTML/CSS, C, C++, JavaScript, SQL, PHP, Java, Python
+Tools: Git, Android Studio, Cursor, VS Code, CI/CD, Figma
 
 ## Projects
 - Logi Tune Mobile App: A comprehensive fitness tracking Android app with workout plans, progress analytics, and social features. Built with Kotlin and Jetpack Compose. (Technologies: Kotlin, Jetpack Compose, Room, Coroutines, Firebase)
