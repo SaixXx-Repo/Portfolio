@@ -1,21 +1,45 @@
-import React from 'react';
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Section, Button } from '../common';
 import { AndroidIcon } from '../icons';
-import { personalInfo } from '../../data/projects';
+import { personalInfo, workExperience } from '../../data/projects';
 import './About.css';
 
 export const About: React.FC = () => {
-  const statsRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(statsRef, { once: true, margin: '-100px' });
+  const [expandedJob, setExpandedJob] = useState<string | null>(null);
+  const [isNavScrolling, setIsNavScrolling] = useState(false);
 
-  const stats = [
-    { label: 'Years Experience', value: '8+' },
-    { label: 'Projects Completed', value: '30+' },
-    { label: 'Apps Published', value: '10+' },
-    { label: 'Happy Clients', value: '20+' },
-  ];
+  // Listen for navigation scroll events (from Hero buttons only)
+  useEffect(() => {
+    const handleNavScrollStart = () => {
+      setIsNavScrolling(true);
+      setExpandedJob(null); // Close any expanded items during nav scroll
+    };
+
+    const handleNavScrollEnd = () => {
+      setIsNavScrolling(false);
+    };
+
+    window.addEventListener('navScrollStart', handleNavScrollStart);
+    window.addEventListener('navScrollEnd', handleNavScrollEnd);
+
+    return () => {
+      window.removeEventListener('navScrollStart', handleNavScrollStart);
+      window.removeEventListener('navScrollEnd', handleNavScrollEnd);
+    };
+  }, []);
+
+  const handleMouseEnter = (jobId: string) => {
+    if (!isNavScrolling) {
+      setExpandedJob(jobId);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (!isNavScrolling) {
+      setExpandedJob(null);
+    }
+  };
 
   const highlights = [
     {
@@ -63,7 +87,6 @@ export const About: React.FC = () => {
     <Section
       id="about"
       title="About Me"
-      subtitle="Passionate about creating exceptional digital experiences"
     >
       <div className="about__grid">
         {/* Profile Card */}
@@ -75,12 +98,14 @@ export const About: React.FC = () => {
           transition={{ duration: 0.6 }}
         >
           <div className="about__image-wrapper">
-            <div className="about__image-placeholder">
-              <span className="about__image-emoji">👨‍💻</span>
-            </div>
+            <img
+              src="/images/profile_picture.jpg"
+              alt={personalInfo.name}
+              className="about__image"
+            />
             <div className="about__image-decoration"></div>
           </div>
-          
+
           <div className="about__info">
             <h3 className="about__name">{personalInfo.name}</h3>
             <p className="about__title">{personalInfo.title}</p>
@@ -96,6 +121,7 @@ export const About: React.FC = () => {
           <Button
             variant="primary"
             href={personalInfo.resumeUrl}
+            onClick={() => window.open('/resume.pdf', '_blank')}
             icon={
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -142,28 +168,90 @@ export const About: React.FC = () => {
         </div>
       </div>
 
-      {/* Stats */}
+      {/* Work Experience Timeline */}
       <motion.div
-        ref={statsRef}
-        className="about__stats"
+        className="about__timeline"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        {stats.map((stat, index) => (
-          <div key={index} className="about__stat">
-            <motion.span
-              className="about__stat-value gradient-text"
-              initial={{ scale: 0.5 }}
-              animate={isInView ? { scale: 1 } : { scale: 0.5 }}
+        <h3 className="about__timeline-title">Work Experience</h3>
+        <div className="timeline">
+          {workExperience.map((job, index) => (
+            <motion.div
+              key={job.id}
+              className={`timeline__item ${expandedJob === job.id ? 'timeline__item--expanded' : ''}`}
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
+              onMouseEnter={() => handleMouseEnter(job.id)}
+              onMouseLeave={handleMouseLeave}
             >
-              {stat.value}
-            </motion.span>
-            <span className="about__stat-label">{stat.label}</span>
-          </div>
-        ))}
+              <div className="timeline__marker">
+                <div className="timeline__dot" />
+                {index < workExperience.length - 1 && <div className="timeline__line" />}
+              </div>
+
+              <div className="timeline__content">
+                <div className="timeline__header">
+                  <div className="timeline__header-main">
+                    <h4 className="timeline__company">{job.company}</h4>
+                    <span className="timeline__role">{job.role}</span>
+                  </div>
+                  <div className="timeline__header-meta">
+                    <span className="timeline__date">{job.startDate} - {job.endDate}</span>
+                    <span className="timeline__location">{job.location}</span>
+                  </div>
+                </div>
+
+                <p className="timeline__description">{job.description}</p>
+
+                <AnimatePresence mode="wait">
+                  {expandedJob === job.id && (
+                    <motion.div
+                      className="timeline__details"
+                      initial={{ opacity: 0, height: 0, marginTop: 0, paddingTop: 0 }}
+                      animate={{ opacity: 1, height: 'auto', marginTop: 16, paddingTop: 16 }}
+                      exit={{ opacity: 0, height: 0, marginTop: 0, paddingTop: 0 }}
+                      transition={{
+                        duration: 0.3,
+                        ease: [0.4, 0, 0.2, 1]
+                      }}
+                    >
+                      <ul className="timeline__highlights">
+                        {job.highlights.map((highlight, i) => (
+                          <motion.li
+                            key={i}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.15 + i * 0.05 }}
+                          >
+                            {highlight}
+                          </motion.li>
+                        ))}
+                      </ul>
+                      <div className="timeline__technologies">
+                        {job.technologies.map((tech, i) => (
+                          <motion.span
+                            key={i}
+                            className="timeline__tech-tag"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.2 + i * 0.03 }}
+                          >
+                            {tech}
+                          </motion.span>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </motion.div>
     </Section>
   );

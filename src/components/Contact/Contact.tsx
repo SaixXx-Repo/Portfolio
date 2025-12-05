@@ -1,34 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Section, Button } from '../common';
+import { Section } from '../common';
 import { personalInfo, socialLinks } from '../../data/projects';
 import './Contact.css';
 
 export const Contact: React.FC = () => {
-  const [formState, setFormState] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormState(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setIsSubmitting(false);
-    setFormState({ name: '', email: '', message: '' });
-    alert('Thank you for your message! I will get back to you soon.');
-  };
-
   const getSocialIcon = (iconName: string) => {
     switch (iconName) {
       case 'github':
@@ -77,7 +53,6 @@ export const Contact: React.FC = () => {
     <Section
       id="contact"
       title="Get In Touch"
-      subtitle="Have a project in mind? Let's work together!"
     >
       <div className="contact__grid">
         {/* Contact Info */}
@@ -96,138 +71,30 @@ export const Contact: React.FC = () => {
             </p>
           </motion.div>
 
-          <motion.div className="contact__details" variants={itemVariants}>
-            <div className="contact__detail">
-              <div className="contact__detail-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <div className="contact__detail-content">
-                <span className="contact__detail-label">Email</span>
-                <a href={`mailto:${personalInfo.email}`} className="contact__detail-value">
-                  {personalInfo.email}
-                </a>
-              </div>
-            </div>
-
-            <div className="contact__detail">
-              <div className="contact__detail-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-                  <circle cx="12" cy="10" r="3" />
-                </svg>
-              </div>
-              <div className="contact__detail-content">
-                <span className="contact__detail-label">Location</span>
-                <span className="contact__detail-value">{personalInfo.location}</span>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Social Links */}
           <motion.div className="contact__socials" variants={itemVariants}>
-            <h4 className="contact__socials-title">Find me on</h4>
-            <div className="contact__socials-grid">
-              {socialLinks.map((link, index) => (
-                <motion.a
-                  key={link.name}
-                  href={link.url}
-                  className="contact__social-link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Visit my ${link.name}`}
-                  whileHover={{ scale: 1.1, y: -5 }}
-                  whileTap={{ scale: 0.95 }}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <span className="contact__social-icon">
-                    {getSocialIcon(link.icon)}
-                  </span>
-                  <span className="contact__social-name">{link.name}</span>
-                </motion.a>
-              ))}
-            </div>
+            {socialLinks.map((link, index) => (
+              <motion.a
+                key={link.name}
+                href={link.url}
+                className="contact__social-link"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Visit my ${link.name}`}
+                whileHover={{ scale: 1.05, y: -3 }}
+                whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <span className="contact__social-icon">
+                  {getSocialIcon(link.icon)}
+                </span>
+                <span className="contact__social-name">{link.name}</span>
+              </motion.a>
+            ))}
           </motion.div>
         </motion.div>
 
-        {/* Contact Form */}
-        <motion.form
-          className="contact__form"
-          onSubmit={handleSubmit}
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="contact__form-group">
-            <label htmlFor="name" className="contact__form-label">
-              Your Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formState.name}
-              onChange={handleChange}
-              className="contact__form-input"
-              placeholder="John Doe"
-              required
-            />
-          </div>
-
-          <div className="contact__form-group">
-            <label htmlFor="email" className="contact__form-label">
-              Your Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formState.email}
-              onChange={handleChange}
-              className="contact__form-input"
-              placeholder="john@example.com"
-              required
-            />
-          </div>
-
-          <div className="contact__form-group">
-            <label htmlFor="message" className="contact__form-label">
-              Message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              value={formState.message}
-              onChange={handleChange}
-              className="contact__form-input contact__form-textarea"
-              placeholder="Tell me about your project..."
-              rows={5}
-              required
-            />
-          </div>
-
-          <Button
-            type="submit"
-            variant="primary"
-            size="lg"
-            disabled={isSubmitting}
-            icon={
-              isSubmitting ? (
-                <span className="contact__spinner" />
-              ) : (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
-                </svg>
-              )
-            }
-          >
-            {isSubmitting ? 'Sending...' : 'Send Message'}
-          </Button>
-        </motion.form>
       </div>
 
       {/* Footer */}

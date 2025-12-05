@@ -37,6 +37,15 @@
   box-shadow: var(--shadow-lg);
 }
 
+.chat-mascot {
+  position: fixed;
+  bottom: calc(var(--spacing-xl) + 45px);
+  right: calc(var(--spacing-xl) - 20px);
+  z-index: 299;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
 /* Pulse Animation */
 .chat-widget__pulse {
   position: absolute;

@@ -1,18 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { gsap } from 'gsap';
 import { Section } from '../common';
-import { 
-  ReactIcon, 
-  TypeScriptIcon, 
-  KotlinIcon, 
-  FirebaseIcon, 
-  GitIcon, 
-  VSCodeIcon, 
-  AndroidIcon, 
-  NodeJSIcon,
-  RocketIcon 
-} from '../icons';
+import * as Icons from '../icons';
 import { skills } from '../../data/projects';
 import { Skill } from '../../types';
 import './Skills.css';
@@ -21,8 +11,6 @@ type SkillCategory = 'all' | 'frontend' | 'mobile' | 'tools' | 'languages';
 
 export const Skills: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<SkillCategory>('all');
-  const skillsRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(skillsRef, { once: true, margin: '-100px' });
 
   const categories: { value: SkillCategory; label: string; icon: string }[] = [
     { value: 'all', label: 'All Skills', icon: '🎯' },
@@ -35,6 +23,22 @@ export const Skills: React.FC = () => {
   const filteredSkills = skills.filter(
     skill => activeCategory === 'all' || skill.category === activeCategory
   );
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05
+      }
+    },
+    exit: {
+      opacity: 0,
+      transition: {
+        duration: 0.2
+      }
+    }
+  };
 
   return (
     <Section
@@ -53,9 +57,8 @@ export const Skills: React.FC = () => {
         {categories.map(category => (
           <button
             key={category.value}
-            className={`skills__category-btn ${
-              activeCategory === category.value ? 'skills__category-btn--active' : ''
-            }`}
+            className={`skills__category-btn ${activeCategory === category.value ? 'skills__category-btn--active' : ''
+              }`}
             onClick={() => setActiveCategory(category.value)}
           >
             <span className="skills__category-icon">{category.icon}</span>
@@ -65,16 +68,24 @@ export const Skills: React.FC = () => {
       </motion.div>
 
       {/* Skills Grid */}
-      <div ref={skillsRef} className="skills__grid">
-        {filteredSkills.map((skill, index) => (
-          <SkillBar
-            key={skill.name}
-            skill={skill}
-            index={index}
-            isInView={isInView}
-          />
-        ))}
-      </div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeCategory}
+          className="skills__grid"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
+          {filteredSkills.map((skill, index) => (
+            <SkillItem
+              key={`${skill.name}-${skill.category}`}
+              skill={skill}
+              index={index}
+            />
+          ))}
+        </motion.div>
+      </AnimatePresence>
 
       {/* Tech Stack Orbit */}
       <TechOrbit />
@@ -82,51 +93,22 @@ export const Skills: React.FC = () => {
   );
 };
 
-interface SkillBarProps {
+interface SkillItemProps {
   skill: Skill;
   index: number;
-  isInView: boolean;
 }
 
-const SkillBar: React.FC<SkillBarProps> = ({ skill, index, isInView }) => {
-  const barRef = useRef<HTMLDivElement>(null);
-  const valueRef = useRef<HTMLSpanElement>(null);
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.2 }
+  }
+};
 
-  useEffect(() => {
-    if (!isInView || !barRef.current || !valueRef.current) return;
-
-    // GSAP animation for the progress bar
-    gsap.fromTo(
-      barRef.current,
-      { width: '0%' },
-      {
-        width: `${skill.level}%`,
-        duration: 1.2,
-        delay: index * 0.1,
-        ease: 'power3.out',
-      }
-    );
-
-    // GSAP counter animation
-    gsap.fromTo(
-      valueRef.current,
-      { textContent: '0' },
-      {
-        textContent: skill.level,
-        duration: 1.2,
-        delay: index * 0.1,
-        ease: 'power3.out',
-        snap: { textContent: 1 },
-        onUpdate: function () {
-          if (valueRef.current) {
-            valueRef.current.textContent = Math.round(
-              parseFloat(valueRef.current.textContent || '0')
-            ).toString();
-          }
-        },
-      }
-    );
-  }, [isInView, skill.level, index]);
+const SkillItem: React.FC<SkillItemProps> = ({ skill, index }) => {
+  const IconComponent = skill.icon ? (Icons as any)[skill.icon] : null;
 
   const getCategoryColor = (category: Skill['category']): string => {
     const colors: Record<Skill['category'], string> = {
@@ -140,26 +122,22 @@ const SkillBar: React.FC<SkillBarProps> = ({ skill, index, isInView }) => {
 
   return (
     <motion.div
-      className="skill-bar"
-      initial={{ opacity: 0, x: -20 }}
-      animate={isInView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.05 }}
+      className="skill-item"
+      variants={itemVariants}
+      style={{
+        borderBottom: `3px solid ${getCategoryColor(skill.category)}`
+      }}
     >
-      <div className="skill-bar__header">
-        <span className="skill-bar__name">{skill.name}</span>
-        <span className="skill-bar__value">
-          <span ref={valueRef}>0</span>%
-        </span>
+      <div className="skill-item__icon">
+        {IconComponent ? (
+          <IconComponent size={32} color={getCategoryColor(skill.category)} />
+        ) : (
+          <span className="skill-item__icon-placeholder" style={{ color: getCategoryColor(skill.category) }}>
+            {skill.name.charAt(0)}
+          </span>
+        )}
       </div>
-      <div className="skill-bar__track">
-        <div
-          ref={barRef}
-          className="skill-bar__fill"
-          style={{
-            background: getCategoryColor(skill.category),
-          }}
-        />
-      </div>
+      <span className="skill-item__name">{skill.name}</span>
     </motion.div>
   );
 };
@@ -168,14 +146,14 @@ const TechOrbit: React.FC = () => {
   const orbitRef = useRef<HTMLDivElement>(null);
 
   const techIcons = [
-    { name: 'React', icon: <ReactIcon size={28} color="#61DAFB" /> },
-    { name: 'TypeScript', icon: <TypeScriptIcon size={28} color="#3178C6" /> },
-    { name: 'Kotlin', icon: <KotlinIcon size={28} color="#7F52FF" /> },
-    { name: 'Firebase', icon: <FirebaseIcon size={28} color="#FFCA28" /> },
-    { name: 'Git', icon: <GitIcon size={28} color="#F05032" /> },
-    { name: 'VS Code', icon: <VSCodeIcon size={28} color="#007ACC" /> },
-    { name: 'Android', icon: <AndroidIcon size={28} color="#3DDC84" /> },
-    { name: 'Node.js', icon: <NodeJSIcon size={28} color="#339933" /> },
+    { name: 'React', icon: <Icons.ReactIcon size={28} color="#61DAFB" /> },
+    { name: 'TypeScript', icon: <Icons.TypeScriptIcon size={28} color="#3178C6" /> },
+    { name: 'Kotlin', icon: <Icons.KotlinIcon size={28} color="#7F52FF" /> },
+    { name: 'Firebase', icon: <Icons.FirebaseIcon size={28} color="#FFCA28" /> },
+    { name: 'Git', icon: <Icons.GitIcon size={28} color="#F05032" /> },
+    { name: 'VS Code', icon: <Icons.VSCodeIcon size={28} color="#007ACC" /> },
+    { name: 'Android', icon: <Icons.AndroidIcon size={28} color="#3DDC84" /> },
+    { name: 'Node.js', icon: <Icons.NodeJSIcon size={28} color="#339933" /> },
   ];
 
   useEffect(() => {
@@ -186,7 +164,7 @@ const TechOrbit: React.FC = () => {
 
     items.forEach((item, index) => {
       const angle = (index / totalItems) * 360;
-      
+
       gsap.set(item, {
         rotation: angle,
       });
@@ -220,7 +198,7 @@ const TechOrbit: React.FC = () => {
       transition={{ duration: 0.8 }}
     >
       <div className="tech-orbit__center">
-        <RocketIcon size={32} color="white" />
+        <Icons.RocketIcon size={32} color="white" />
         <span className="tech-orbit__center-text">Tech Stack</span>
       </div>
       <div ref={orbitRef} className="tech-orbit__ring">

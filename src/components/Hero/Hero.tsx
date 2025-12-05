@@ -13,7 +13,7 @@ export const Hero: React.FC = () => {
     // GSAP Particle Animation
     if (particlesRef.current) {
       const particles = particlesRef.current.querySelectorAll('.particle');
-      
+
       particles.forEach((particle, index) => {
         gsap.set(particle, {
           x: Math.random() * window.innerWidth,
@@ -47,8 +47,16 @@ export const Hero: React.FC = () => {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
+    // Dispatch custom event to signal programmatic scroll
+    window.dispatchEvent(new CustomEvent('navScrollStart'));
+
     const element = document.getElementById(sectionId);
     element?.scrollIntoView({ behavior: 'smooth' });
+
+    // Signal scroll end after animation completes
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('navScrollEnd'));
+    }, 1000); // Smooth scroll typically takes ~1 second
   };
 
   return (
@@ -75,21 +83,39 @@ export const Hero: React.FC = () => {
           Available for opportunities
         </motion.div>
 
-        <h1 className="hero__title">
-          <AnimatedText
-            text="Hi, I'm"
-            variant="reveal"
-            delay={0.2}
-            className="hero__greeting"
-          />
-          <br />
-          <AnimatedText
-            text={personalInfo.name}
-            variant="gradient"
-            delay={0.6}
-            className="hero__name"
-          />
-        </h1>
+        <div className="hero__intro">
+          <div className="hero__text">
+            <h1 className="hero__title">
+              <AnimatedText
+                text="Hi, I'm"
+                variant="reveal"
+                delay={0.2}
+                className="hero__greeting"
+              />
+              <br />
+              <AnimatedText
+                text={personalInfo.name}
+                variant="gradient"
+                delay={0.6}
+                className="hero__name"
+              />
+            </h1>
+          </div>
+
+          <motion.div
+            className="hero__profile-image"
+            initial={{ opacity: 0, scale: 0.8, x: 50 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+          >
+            <img
+              src="/images/profile_picture.jpg"
+              alt={personalInfo.name}
+              className="hero__image"
+            />
+            <div className="hero__image-ring"></div>
+          </motion.div>
+        </div>
 
         <motion.h2
           className="hero__role"

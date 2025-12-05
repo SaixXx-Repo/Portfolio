@@ -32,19 +32,27 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
       const sections = navItems.map(item => document.getElementById(item.id));
       const scrollPosition = window.scrollY + 100;
 
-      sections.forEach((section, index) => {
-        if (section) {
-          const sectionTop = section.offsetTop;
-          const sectionHeight = section.offsetHeight;
+      // Check if we're at the bottom of the page
+      const isNearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100;
 
-          if (
-            scrollPosition >= sectionTop &&
-            scrollPosition < sectionTop + sectionHeight
-          ) {
-            setActiveSection(navItems[index].id);
+      if (isNearBottom) {
+        // If near bottom, highlight the last section (contact)
+        setActiveSection('contact');
+      } else {
+        sections.forEach((section, index) => {
+          if (section) {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+
+            if (
+              scrollPosition >= sectionTop &&
+              scrollPosition < sectionTop + sectionHeight
+            ) {
+              setActiveSection(navItems[index].id);
+            }
           }
-        }
-      });
+        });
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -81,9 +89,8 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
           {navItems.map(item => (
             <button
               key={item.id}
-              className={`navbar__nav-item ${
-                activeSection === item.id ? 'navbar__nav-item--active' : ''
-              }`}
+              className={`navbar__nav-item ${activeSection === item.id ? 'navbar__nav-item--active' : ''
+                }`}
               onClick={() => scrollToSection(item.id)}
             >
               {item.label}
@@ -101,7 +108,7 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
         {/* Actions */}
         <div className="navbar__actions">
           <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
-          
+
           {/* Mobile Menu Button */}
           <button
             className="navbar__mobile-toggle"
@@ -134,9 +141,8 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
             {navItems.map((item, index) => (
               <motion.button
                 key={item.id}
-                className={`navbar__mobile-item ${
-                  activeSection === item.id ? 'navbar__mobile-item--active' : ''
-                }`}
+                className={`navbar__mobile-item ${activeSection === item.id ? 'navbar__mobile-item--active' : ''
+                  }`}
                 onClick={() => scrollToSection(item.id)}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}

@@ -20,7 +20,7 @@
   font-weight: var(--font-weight-medium);
   color: var(--color-text-secondary);
   cursor: pointer;
-  transition: 
+  transition:
     border-color var(--transition-fast),
     color var(--transition-fast),
     background-color var(--transition-fast);
@@ -44,76 +44,49 @@
 /* Skills Grid */
 .skills__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: var(--spacing-lg);
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--spacing-md);
   margin-bottom: var(--spacing-4xl);
 }
 
-/* Skill Bar */
-.skill-bar {
+/* Skill Item */
+.skill-item {
   background: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
-}
-
-.skill-bar__header {
+  padding: var(--spacing-md);
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: var(--spacing-sm);
+  gap: var(--spacing-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.skill-bar__name {
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
+.skill-item:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
 }
 
-.skill-bar__value {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-sm);
-  color: var(--color-accent-primary);
-  font-weight: var(--font-weight-semibold);
-}
-
-.skill-bar__track {
-  height: 8px;
+.skill-item__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
   background: var(--color-bg-tertiary);
   border-radius: var(--radius-full);
-  overflow: hidden;
 }
 
-.skill-bar__fill {
-  height: 100%;
-  border-radius: var(--radius-full);
-  width: 0;
-  transition: width 0.3s ease;
-  position: relative;
+.skill-item__icon-placeholder {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
 }
 
-.skill-bar__fill::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.2) 50%,
-    transparent 100%
-  );
-  animation: shimmer 2s infinite;
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
+.skill-item__name {
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  text-align: center;
 }
 
 /* Tech Orbit */
@@ -245,4 +218,3 @@
     display: none;
   }
 }
-

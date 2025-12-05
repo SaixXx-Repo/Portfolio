@@ -6,8 +6,7 @@ const formatSkillsByCategory = () => {
   return categories.map(category => {
     const categorySkills = skills
       .filter(s => s.category === category)
-      .sort((a, b) => b.level - a.level)
-      .map(s => `${s.name} (${s.level}% proficiency)`)
+      .map(s => s.name)
       .join(', ');
     return `${category.charAt(0).toUpperCase() + category.slice(1)}: ${categorySkills}`;
   }).join('\n');
@@ -15,14 +14,14 @@ const formatSkillsByCategory = () => {
 
 // Format projects for the AI context
 const formatProjects = () => {
-  return projects.map(p => 
+  return projects.map(p =>
     `- ${p.title}: ${p.description} (Technologies: ${p.technologies.join(', ')})`
   ).join('\n');
 };
 
 // Format certificates for the AI context
 const formatCertificates = () => {
-  return certificates.map(c => 
+  return certificates.map(c =>
     `- ${c.title} by ${c.issuer} (${c.date})`
   ).join('\n');
 };

@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ChatMascot } from './ChatMascot';
+import { ChatAvatar } from './ChatAvatar';
 import './ChatWidget.css';
 
 interface Message {
@@ -29,9 +31,10 @@ export const ChatWidget: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [lastMessageTime, setLastMessageTime] = useState<number>(0);
-  const [selectedModel, setSelectedModel] = useState<'gpt-4o-mini' | 'gpt-3.5-turbo' | 'gemini-2.0-flash'>('gpt-4o-mini');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const [showAttention, setShowAttention] = useState(false);
 
   // Rate limiting - minimum 2 seconds between messages
   const RATE_LIMIT_MS = 2000;
@@ -47,7 +50,18 @@ export const ChatWidget: React.FC = () => {
   useEffect(() => {
     if (isOpen && inputRef.current) {
       inputRef.current.focus();
+      setShowAttention(false);
     }
+  }, [isOpen]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!isOpen) {
+        setShowAttention(true);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timer);
   }, [isOpen]);
 
   const sendMessage = async (content: string) => {
@@ -82,7 +96,7 @@ export const ChatWidget: React.FC = () => {
             role: m.role,
             content: m.content,
           })),
-          model: selectedModel,
+          model: 'gemini-2.0-flash',
         }),
       });
 
@@ -124,12 +138,28 @@ export const ChatWidget: React.FC = () => {
 
   return (
     <>
+      {/* Attention Mascot */}
+      <AnimatePresence>
+        {showAttention && !isOpen && (
+          <ChatMascot />
+        )}
+      </AnimatePresence>
+
       {/* Chat Toggle Button */}
       <motion.button
         className={`chat-widget__toggle ${isOpen ? 'chat-widget__toggle--open' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
+        animate={showAttention && !isOpen ? {
+          y: [0, -10, 0],
+          transition: {
+            duration: 1.5,
+            repeat: Infinity,
+            repeatType: "loop",
+            ease: "easeInOut"
+          }
+        } : {}}
         aria-label={isOpen ? 'Close chat' : 'Open chat'}
       >
         <AnimatePresence mode="wait">
@@ -165,7 +195,7 @@ export const ChatWidget: React.FC = () => {
         </AnimatePresence>
 
         {/* Pulse animation when closed */}
-        {!isOpen && (
+        {!isOpen && !showAttention && (
           <span className="chat-widget__pulse" />
         )}
       </motion.button>
@@ -184,7 +214,7 @@ export const ChatWidget: React.FC = () => {
             <div className="chat-widget__header">
               <div className="chat-widget__header-info">
                 <div className="chat-widget__avatar">
-                  <span>🤖</span>
+                  <ChatAvatar />
                 </div>
                 <div className="chat-widget__header-text">
                   <h3>Max's AI Assistant</h3>
@@ -194,16 +224,6 @@ export const ChatWidget: React.FC = () => {
                   </span>
                 </div>
               </div>
-              <select
-                className="chat-widget__model-select"
-                value={selectedModel}
-                onChange={(e) => setSelectedModel(e.target.value as 'gpt-4o-mini' | 'gpt-3.5-turbo' | 'gemini-2.0-flash')}
-                title="Select AI Model"
-              >
-                <option value="gpt-4o-mini">GPT-4o Mini</option>
-                <option value="gpt-3.5-turbo">GPT-3.5</option>
-                <option value="gemini-2.0-flash">Gemini 2.0</option>
-              </select>
               <button
                 className="chat-widget__close"
                 onClick={() => setIsOpen(false)}
@@ -226,7 +246,9 @@ export const ChatWidget: React.FC = () => {
                   transition={{ duration: 0.3 }}
                 >
                   {message.role === 'assistant' && (
-                    <div className="chat-widget__message-avatar">🤖</div>
+                    <div className="chat-widget__message-avatar">
+                      <ChatAvatar />
+                    </div>
                   )}
                   <div className="chat-widget__message-content">
                     {message.content}
@@ -241,7 +263,9 @@ export const ChatWidget: React.FC = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                 >
-                  <div className="chat-widget__message-avatar">🤖</div>
+                  <div className="chat-widget__message-avatar">
+                    <ChatAvatar />
+                  </div>
                   <div className="chat-widget__message-content chat-widget__typing">
                     <span />
                     <span />
