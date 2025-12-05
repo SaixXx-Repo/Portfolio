@@ -69,15 +69,11 @@ A modern, interactive personal portfolio website built with React and TypeScript
 
 ## 📸 Screenshots
 
-### Landing Page
-![Landing Page](./public/images/landing-page.PNG)
+### Skills Page
+![Skills Page](./public/images/skills.PNG)
 
 ### Projects Section
 ![Projects](./public/images/projects.PNG)
 
 ### Chat Widget
 ![Chat Widget](./public/images/chat-widget.PNG)
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
