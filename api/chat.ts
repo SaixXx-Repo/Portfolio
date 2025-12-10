@@ -101,7 +101,7 @@ async function callGemini(messages: ChatMessage[], apiKey: string): Promise<stri
     parts: [{ text: "I understand! I'm Max's AI assistant, ready to help answer questions about his professional background, skills, and projects. How can I help you today?" }]
   });
 
-  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -140,7 +140,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     let assistantMessage: string;
 
-    if (model === 'gemini-2.0-flash') {
+    if (model === 'gemini-2.5-flash') {
       // Use Gemini
       const geminiKey = process.env.GEMINI_API_KEY;
       if (!geminiKey) {
