@@ -96,12 +96,15 @@ export const ChatWidget: React.FC = () => {
             role: m.role,
             content: m.content,
           })),
-          model: 'gemini-2.0-flash',
+          model: 'gemini-2.5-flash',
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to get response');
+        const errorText = await response.text();
+        console.error('API request failed with status:', response.status);
+        console.error('Error details:', errorText);
+        throw new Error(`Failed to get response: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
@@ -115,6 +118,7 @@ export const ChatWidget: React.FC = () => {
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
+      console.error('Error in sendMessage:', error);
       const errorMessage: Message = {
         id: `error-${Date.now()}`,
         role: 'assistant',

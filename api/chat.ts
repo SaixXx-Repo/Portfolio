@@ -140,21 +140,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     let assistantMessage: string;
 
-    if (model === 'gemini-2.5-flash') {
-      // Use Gemini
-      const geminiKey = process.env.GEMINI_API_KEY;
-      if (!geminiKey) {
-        return res.status(500).json({ error: 'Gemini API key not configured' });
-      }
-      assistantMessage = await callGemini(messages, geminiKey);
-    } else {
-      // Use OpenAI (default)
+    // Default to Gemini, use OpenAI only if explicitly requested
+    if (model && model.startsWith('gpt-')) {
+      console.log('Using OpenAI API');
+      // Use OpenAI
       const openaiKey = process.env.OPENAI_API_KEY;
       if (!openaiKey) {
         return res.status(500).json({ error: 'OpenAI API key not configured' });
       }
       const selectedModel = model === 'gpt-3.5-turbo' ? 'gpt-3.5-turbo' : 'gpt-4o-mini';
       assistantMessage = await callOpenAI(messages, selectedModel, openaiKey);
+    } else {
+      // Use Gemini (Default)
+      console.log('Using Gemini API');
+      const geminiKey = process.env.GEMINI_API_KEY;
+      if (!geminiKey) {
+        return res.status(500).json({ error: 'Gemini API key not configured' });
+      }
+      assistantMessage = await callGemini(messages, geminiKey);
     }
 
     if (!assistantMessage) {
