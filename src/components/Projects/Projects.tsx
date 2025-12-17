@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Section, Card } from '../common';
-import { AndroidIcon, ReactIcon } from '../icons';
+import { AndroidIcon, ReactIcon, AntigravityIcon, NodeJSIcon } from '../icons';
 import { projects } from '../../data/projects';
 import { Project } from '../../types';
 import './Projects.css';
 
-type ProjectCategory = 'all' | 'android' | 'react';
+type ProjectCategory = 'all' | 'android' | 'react' | 'other';
 
 export const Projects: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<ProjectCategory>('all');
@@ -17,6 +17,7 @@ export const Projects: React.FC = () => {
     { value: 'all', label: 'All Projects' },
     { value: 'android', label: 'Android Apps' },
     { value: 'react', label: 'React Projects' },
+    { value: 'other', label: 'AI & Other' },
   ];
 
   const filteredProjects = projects.filter(
@@ -150,6 +151,18 @@ export const Projects: React.FC = () => {
       Antigravity: (
         <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="#6366F1">
           <path d="M12 2L4 20h3l1.5-4h7l1.5 4h3L12 2zm0 5l2.5 7h-5L12 7z" />
+        </svg>
+      ),
+      'WhatsApp Web.js': <NodeJSIcon size={iconSize} color="#339933" />,
+      'DeepL API': (
+        <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="#0F2B46">
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
+        </svg>
+      ),
+      'QRCode Terminal': (
+        <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 13h6v6H3v-6zm2 2v2h2v-2H5zm13-2h3v2h-3v-2zm-3 2h2v2h-2v-2zm3 2h3v2h-3v-2zM3 21h6v-6H3v6zm13 0h3v-2h-3v2z" />
         </svg>
       ),
     };
@@ -299,8 +312,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           <div className={`project-card__image-placeholder ${!project.image ? 'project-card__image-placeholder--visible' : ''}`}>
             {project.category === 'android' ? (
               <AndroidIcon size={64} color="#3DDC84" />
-            ) : (
+            ) : project.category === 'react' ? (
               <ReactIcon size={64} color="#61DAFB" />
+            ) : (
+              <AntigravityIcon size={64} color="#6366F1" />
             )}
           </div>
           <motion.div
@@ -368,8 +383,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           <span className="project-card__category">
             {project.category === 'android' ? (
               <><AndroidIcon size={14} color="#3DDC84" /> Android</>
-            ) : (
+            ) : project.category === 'react' ? (
               <><ReactIcon size={14} color="#61DAFB" /> React</>
+            ) : (
+              <><AntigravityIcon size={14} color="#6366F1" /> AI Agent</>
             )}
           </span>
         </div>

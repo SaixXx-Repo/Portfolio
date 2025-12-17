@@ -60,7 +60,7 @@ export const projects: Project[] = [
     id: 'portfolio-site',
     title: 'This Portfolio',
     description: 'The portfolio website you are currently viewing! Built to showcase my work and learn new technologies.',
-    image: '/images/projects/portfolio.png',
+    image: '/images/projects/portfolio-new.png',
     technologies: ['React', 'TypeScript', 'Framer Motion', 'CSS', 'HTML', 'Vercel', 'Gemini AI', 'Antigravity'],
     category: 'react',
     githubUrl: 'https://github.com/SaixXx-Repo/Portfolio',
@@ -184,10 +184,8 @@ export const personalInfo = {
   name: 'Maximilian Funk',
   title: 'Android & React Developer',
   tagline: 'Crafting beautiful mobile experiences and modern web applications',
-  bio: `I'm a passionate software developer specializing in Android app development and React frontend development. 
-  With a keen eye for design and a love for clean code, I create applications that are both beautiful and performant.
-  
-  When I'm not coding, you can find me working out or spending time with my family and friends.`,
+  bio: `Passionate Android Developer with a strong command of Frontend technologies. Deeply experienced in crafting intuitive mobile applications using Kotlin, Coroutines, and Jetpack Compose, with proven ability to extend functionality to the web using React and TypeScript. 
+  A proactive problem solver who combines technical depth in mobile architecture with the flexibility to build responsive, cross-platform interfaces.`,
   location: 'Copenhagen, Denmark',
   email: 'maxchfunk@gmail.com',
   resumeUrl: '#',
