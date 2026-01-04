@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChatMascot } from './ChatMascot';
 import { ChatAvatar } from './ChatAvatar';
+import { useAnalytics } from '../../hooks/useAnalytics';
 import './ChatWidget.css';
 
 import { personalInfo, projects, skills, workExperience, certificates, socialLinks } from '../../data/projects';
@@ -51,6 +52,7 @@ const SUGGESTED_QUESTIONS = [
 ];
 
 export const ChatWidget: React.FC = () => {
+  const { trackChatMessage } = useAnalytics();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -116,6 +118,7 @@ export const ChatWidget: React.FC = () => {
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
+    trackChatMessage();
 
     try {
       // Filter out the welcome message and map only role/content

@@ -188,7 +188,7 @@ export const personalInfo = {
   A proactive problem solver who combines technical depth in mobile architecture with the flexibility to build responsive, cross-platform interfaces.`,
   location: 'Copenhagen, Denmark',
   email: 'maxchfunk@gmail.com',
-  resumeUrl: '#',
+  resumeUrl: '/Maximilian_Funk_CV.pdf',
 };
 
 export interface WorkExperience {

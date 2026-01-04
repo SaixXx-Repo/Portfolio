@@ -4,6 +4,7 @@ import { Section, Card } from '../common';
 import { AndroidIcon, ReactIcon, AntigravityIcon, NodeJSIcon } from '../icons';
 import { projects } from '../../data/projects';
 import { Project } from '../../types';
+import { useAnalytics } from '../../hooks/useAnalytics';
 import './Projects.css';
 
 type ProjectCategory = 'all' | 'android' | 'react' | 'other';
@@ -12,6 +13,7 @@ export const Projects: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<ProjectCategory>('all');
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
+  const { trackProjectInteraction } = useAnalytics();
 
   const categories: { value: ProjectCategory; label: string }[] = [
     { value: 'all', label: 'All Projects' },
@@ -225,6 +227,7 @@ export const Projects: React.FC = () => {
               onLeave={() => setHoveredProject(null)}
               getTechIcon={getTechIcon}
               onVideoClick={(url) => setActiveVideo(url)}
+              onInteraction={trackProjectInteraction}
             />
           ))}
         </AnimatePresence>
@@ -248,6 +251,7 @@ interface ProjectCardProps {
   onLeave: () => void;
   getTechIcon: (tech: string) => React.ReactNode;
   onVideoClick: (url: string) => void;
+  onInteraction: (projectId: string) => void;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
@@ -259,6 +263,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   onLeave,
   getTechIcon,
   onVideoClick,
+  onInteraction,
 }) => {
   // Stagger delays for smoother animations
   const enterDelay = index * 0.08;
@@ -332,6 +337,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="View source code"
+                  onClick={() => onInteraction(project.id)}
                 >
                   <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
@@ -345,6 +351,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="View live demo"
+                  onClick={() => onInteraction(project.id)}
                 >
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
@@ -358,6 +365,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="View on Play Store"
+                  onClick={() => onInteraction(project.id)}
                 >
                   <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z" />
@@ -370,6 +378,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                   onClick={(e) => {
                     e.stopPropagation();
                     onVideoClick(project.videoUrl!);
+                    onInteraction(project.id);
                   }}
                   aria-label="Watch video demo"
                 >

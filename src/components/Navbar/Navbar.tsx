@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeToggle } from '../ThemeToggle';
 import { Theme } from '../../types';
 import { personalInfo } from '../../data/projects';
+import { useAnalytics } from '../../hooks/useAnalytics';
 import './Navbar.css';
 
 interface NavbarProps {
@@ -23,6 +24,7 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
+  const { trackContactClick } = useAnalytics();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,6 +62,9 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
+    if (sectionId === 'contact') {
+      trackContactClick();
+    }
     const element = document.getElementById(sectionId);
     element?.scrollIntoView({ behavior: 'smooth' });
     setIsMobileMenuOpen(false);

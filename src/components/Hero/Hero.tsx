@@ -1,13 +1,41 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { Button, AnimatedText } from '../common';
 import { personalInfo } from '../../data/projects';
+import { useAnalytics } from '../../hooks/useAnalytics';
+import { AdminDashboard } from '../Admin/AdminDashboard';
 import './Hero.css';
 
 export const Hero: React.FC = () => {
   const particlesRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
+  const { trackResumeDownload, trackContactClick } = useAnalytics();
+
+  // Secret Trigger Logic
+  const [clickCount, setClickCount] = useState(0);
+  const [showAdmin, setShowAdmin] = useState(false);
+  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleProfileClick = () => {
+    setClickCount(prev => prev + 1);
+
+    // Clear existing timeout
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
+    }
+
+    // Check if threshold reached
+    if (clickCount + 1 >= 3) {
+      setShowAdmin(true);
+      setClickCount(0);
+    } else {
+      // Reset count after 2 seconds of inactivity
+      clickTimeoutRef.current = setTimeout(() => {
+        setClickCount(0);
+      }, 2000);
+    }
+  };
 
   useEffect(() => {
     // GSAP Particle Animation
@@ -99,6 +127,7 @@ export const Hero: React.FC = () => {
             initial={{ opacity: 0, scale: 0.8, x: 50 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
+            onClick={handleProfileClick}
           >
             <img
               src="/images/profile_picture.jpg"
@@ -108,6 +137,8 @@ export const Hero: React.FC = () => {
             <div className="hero__image-ring"></div>
           </motion.div>
         </div>
+
+        <AdminDashboard isOpen={showAdmin} onClose={() => setShowAdmin(false)} />
 
         <motion.h2
           className="hero__role"
@@ -129,19 +160,25 @@ export const Hero: React.FC = () => {
           <Button
             variant="primary"
             size="lg"
-            onClick={() => scrollToSection('projects')}
+            onClick={() => {
+              window.open(personalInfo.resumeUrl, '_blank');
+              trackResumeDownload();
+            }}
             icon={
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
             }
           >
-            View My Work
+            Download Resume
           </Button>
           <Button
             variant="secondary"
             size="lg"
-            onClick={() => scrollToSection('contact')}
+            onClick={() => {
+              scrollToSection('contact');
+              trackContactClick();
+            }}
             icon={
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />

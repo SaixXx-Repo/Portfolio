@@ -2,9 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Section } from '../common';
 import { personalInfo, socialLinks } from '../../data/projects';
+import { useAnalytics } from '../../hooks/useAnalytics';
 import './Contact.css';
 
 export const Contact: React.FC = () => {
+  const { trackSocialClick } = useAnalytics();
   const getSocialIcon = (iconName: string) => {
     switch (iconName) {
       case 'github':
@@ -85,6 +87,7 @@ export const Contact: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
+                onClick={() => trackSocialClick(link.name)}
               >
                 <span className="contact__social-icon">
                   {getSocialIcon(link.icon)}

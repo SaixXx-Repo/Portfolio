@@ -3,9 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Section, Button } from '../common';
 import { AndroidIcon } from '../icons';
 import { personalInfo, workExperience } from '../../data/projects';
+import { useAnalytics } from '../../hooks/useAnalytics';
 import './About.css';
 
 export const About: React.FC = () => {
+  const { trackResumeDownload } = useAnalytics();
   const [expandedJob, setExpandedJob] = useState<string | null>(null);
   const [isNavScrolling, setIsNavScrolling] = useState(false);
 
@@ -121,7 +123,10 @@ export const About: React.FC = () => {
           <Button
             variant="primary"
             href={personalInfo.resumeUrl}
-            onClick={() => window.open('/Maximilian_Funk_CV.pdf', '_blank')}
+            onClick={() => {
+              window.open(personalInfo.resumeUrl, '_blank');
+              trackResumeDownload();
+            }}
             icon={
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
