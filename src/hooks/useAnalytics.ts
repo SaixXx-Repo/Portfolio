@@ -86,6 +86,11 @@ export const useAnalytics = () => {
         track('social_click', { platform });
     };
 
+    const resetStats = () => {
+        saveStats(initialStats);
+        return initialStats;
+    };
+
     return {
         getStats,
         trackPageView,
@@ -95,5 +100,6 @@ export const useAnalytics = () => {
         trackProjectInteraction,
         trackCertificateClick,
         trackSocialClick,
+        resetStats,
     };
 };

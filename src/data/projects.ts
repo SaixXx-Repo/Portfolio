@@ -51,7 +51,7 @@ export const projects: Project[] = [
   {
     id: 'whatsapp-ai-bot',
     title: 'WhatsApp AI Agent',
-    description: 'A WhatsApp bot that uses AI to automate replies and translations. It features a "Robot Mode" for auto-replies and special commands for instant translations to Swedish or German.',
+    description: 'A WhatsApp bot that uses AI to automate replies and translations. It features a mode for auto-replies and special commands for instant translations to Swedish or German.',
     image: '/images/projects/whatsapp-bot.png',
     technologies: ['Node.js', 'WhatsApp Web.js', 'Google Gemini AI', 'DeepL API', 'QRCode Terminal'],
     category: 'other',

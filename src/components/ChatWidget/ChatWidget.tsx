@@ -52,7 +52,7 @@ const SUGGESTED_QUESTIONS = [
 ];
 
 export const ChatWidget: React.FC = () => {
-  const { trackChatMessage } = useAnalytics();
+  const { trackChatMessage, resetStats } = useAnalytics();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -100,6 +100,27 @@ export const ChatWidget: React.FC = () => {
 
   const sendMessage = async (content: string) => {
     if (!content.trim() || isLoading) return;
+
+    if (content.trim() === '!RESET') {
+      resetStats();
+      setMessages(prev => [
+        ...prev,
+        {
+          id: `user-${Date.now()}`,
+          role: 'user',
+          content: content.trim(),
+          timestamp: new Date(),
+        },
+        {
+          id: `system-${Date.now()}`,
+          role: 'assistant',
+          content: "Local analytics dashboard has been reset. Note: Vercel Analytics data cannot be reset from the client.",
+          timestamp: new Date(),
+        }
+      ]);
+      setInputValue('');
+      return;
+    }
 
     // Rate limiting check
     const now = Date.now();
