@@ -123,8 +123,9 @@ export const About: React.FC = () => {
           <Button
             variant="primary"
             href={personalInfo.resumeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => {
-              window.open(personalInfo.resumeUrl, '_blank');
               trackResumeDownload();
             }}
             icon={

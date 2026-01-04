@@ -11,6 +11,8 @@ interface ButtonProps {
   className?: string;
   icon?: React.ReactNode;
   iconPosition?: 'left' | 'right';
+  target?: string;
+  rel?: string;
   disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
 }
@@ -26,6 +28,8 @@ export const Button: React.FC<ButtonProps> = ({
   iconPosition = 'left',
   disabled = false,
   type = 'button',
+  target,
+  rel,
 }) => {
   const [ripples, setRipples] = useState<{ x: number; y: number; id: number }[]>([]);
 
@@ -71,8 +75,8 @@ export const Button: React.FC<ButtonProps> = ({
         onClick={handleClick}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.98 }}
-        target={href.startsWith('http') ? '_blank' : undefined}
-        rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+        target={target || (href.startsWith('http') ? '_blank' : undefined)}
+        rel={rel || (href.startsWith('http') ? 'noopener noreferrer' : undefined)}
       >
         {content}
       </motion.a>
