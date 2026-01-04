@@ -4,12 +4,44 @@ import { ChatMascot } from './ChatMascot';
 import { ChatAvatar } from './ChatAvatar';
 import './ChatWidget.css';
 
+import { personalInfo, projects, skills, workExperience, certificates, socialLinks } from '../../data/projects';
+
 interface Message {
   id: string;
-  role: 'user' | 'assistant';
+  role: 'user' | 'assistant' | 'system';
   content: string;
   timestamp: Date;
 }
+
+const SYSTEM_PROMPT = `
+You are an AI assistant for ${personalInfo.name}'s portfolio website. 
+Here is detailed information about Max (Maximilian Funk):
+
+Personal Info:
+${JSON.stringify(personalInfo, null, 2)}
+
+My Work Experience:
+${JSON.stringify(workExperience, null, 2)}
+
+My Projects:
+${JSON.stringify(projects, null, 2)}
+
+My Skills:
+${JSON.stringify(skills, null, 2)}
+
+My Certificates:
+${JSON.stringify(certificates, null, 2)}
+
+Social Links:
+${JSON.stringify(socialLinks, null, 2)}
+
+Instructions:
+1. Answer questions about Max's experience, skills, and projects using the data above.
+2. Be friendly, professional, and concise.
+3. If asked about contact info, provide his email (${personalInfo.email}) or social links.
+4. If asked about something not in the data, say you don't have that specific information but can tell them about his known projects and experience.
+5. Emphasize his expertise in Android (Kotlin, Jetpack Compose) and React/Frontend development.
+`;
 
 const SUGGESTED_QUESTIONS = [
   "What are your main skills?",
@@ -86,16 +118,27 @@ export const ChatWidget: React.FC = () => {
     setIsLoading(true);
 
     try {
+      // Filter out the welcome message and map only role/content
+      const apiMessages = messages
+        .filter(m => m.id !== 'welcome')
+        .map(m => ({ role: m.role, content: m.content }));
+
+      // Add user's new message
+      apiMessages.push({ role: userMessage.role, content: userMessage.content });
+
+      // Prepend system prompt
+      const payloadMessages = [
+        { role: 'system', content: SYSTEM_PROMPT },
+        ...apiMessages
+      ];
+
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          messages: [...messages, userMessage].map(m => ({
-            role: m.role,
-            content: m.content,
-          })),
+          messages: payloadMessages,
           model: 'gemini-2.5-flash',
         }),
       });

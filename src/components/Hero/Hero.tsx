@@ -73,15 +73,7 @@ export const Hero: React.FC = () => {
       </div>
 
       <div className="hero__content">
-        <motion.div
-          className="hero__badge"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <span className="hero__badge-dot"></span>
-          Available for opportunities
-        </motion.div>
+
 
         <div className="hero__intro">
           <div className="hero__text">
